@@ -1,0 +1,47 @@
+# כותרות HTTP לנטליפי.
+#
+# הקובץ הזה יושב ב-public/ ולכן מועתק ל-out/ ונקרא בפריסה — בניגוד ל-netlify.toml,
+# שנמצא בשורש הפרויקט ולכן מעולם לא נכלל בזיפ ולא נקרא.
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  # Content-Security-Policy — הרשימה נגזרה מתעבורת הרשת בפועל של האתר.
+  # 'unsafe-inline' ל-script נדרש: באתר סטטי אין שרת שייצר nonce לכל בקשה,
+  # ו-Next.js, GA4 והפיקסל מסתמכים על סקריפטים inline. עדיין חוסם מקורות
+  # חיצוניים לא מורשים ומונע דליפת נתונים ליעד שאינו ברשימה.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://*.clarity.ms https://analytics.tiktok.com https://analytics-sg.tiktok.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com https://feeds.behold.so https://connect.facebook.net https://www.facebook.com https://*.clarity.ms https://c.bing.com https://analytics.tiktok.com https://analytics-sg.tiktok.com; frame-src https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com; media-src 'self' https://player.vimeo.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; upgrade-insecure-requests
+
+# נכסי הבנייה של Next — שם הקובץ מכיל hash, אז שינוי תוכן = שם חדש.
+# בטוח לשמור אותם לנצח.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# תמונות וגופנים — נשמרים שנה, עם revalidate ברקע.
+/reviews/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/blog-images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# נכסים בשורש. חובה שנתיב יתחיל ב-"/" — דפוס כמו "*.webp" פשוט לא נתפס
+# בנטליפי, והקבצים מקבלים max-age=0 בשקט.
+/logo-tight.webp
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/logo-tight.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/favicon.ico
+  Cache-Control: public, max-age=2592000
+
+/icon-192.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/icon-512.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/apple-icon.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
