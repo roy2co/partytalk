@@ -3,6 +3,11 @@ import { POSTS } from "./posts";
 import BlogImage from "./BlogImage";
 import ContactLink from "../components/ContactLink";
 
+// החדש ראשון - בתאריך זהה, מה שנוסף אחרון למערך מופיע קודם
+const SORTED_POSTS = [...POSTS]
+  .reverse()
+  .sort((a, b) => b.date.localeCompare(a.date));
+
 export const metadata: Metadata = {
   title: "הבלוג של PartyTalk | טיפים, השראה וזיכרון מהאירוע",
   description:
@@ -73,7 +78,7 @@ export default function BlogIndex() {
       {/* Posts grid */}
       <main className="max-w-5xl mx-auto px-4 pb-24">
         <div className="grid gap-8 sm:grid-cols-2">
-          {POSTS.map((post) => (
+          {SORTED_POSTS.map((post) => (
             <a
               key={post.slug}
               href={`/blog/${post.slug}`}

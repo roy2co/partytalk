@@ -53,6 +53,13 @@ function formatDate(iso: string) {
 
 // ── Embed helper - Vimeo / YouTube → iframe src ───────────────
 function toEmbedSrc(src: string) {
+  const yt = src.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/
+  );
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`;
+  const vimeo = src.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)(?:\/(\w+))?/);
+  if (vimeo)
+    return `https://player.vimeo.com/video/${vimeo[1]}${vimeo[2] ? `?h=${vimeo[2]}` : ""}`;
   return src;
 }
 
@@ -109,9 +116,15 @@ function Block({ block }: { block: BlogBlock }) {
         </figure>
       );
     case "video":
+      if (!block.src) return null;
       return (
         <figure className="my-8">
-          <div className="rounded-2xl overflow-hidden bg-black shadow-[0_16px_50px_rgba(0,0,0,0.4)]" style={{ aspectRatio: "16/9" }}>
+          <div
+            className={`rounded-2xl overflow-hidden bg-black shadow-[0_16px_50px_rgba(0,0,0,0.4)] ${
+              block.vertical ? "max-w-sm mx-auto" : ""
+            }`}
+            style={{ aspectRatio: block.vertical ? "9/16" : "16/9" }}
+          >
             <iframe
               src={toEmbedSrc(block.src)}
               title={block.title || "PartyTalk video"}
