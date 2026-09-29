@@ -3,6 +3,7 @@ import BackButton from "../components/BackButton";
 
 export const metadata: Metadata = {
   title: "מדיניות פרטיות - PartyTalk",
+  alternates: { canonical: "/privacy/" },
 };
 
 export default function PrivacyPage() {

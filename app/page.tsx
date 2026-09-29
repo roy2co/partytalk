@@ -142,7 +142,7 @@ function Header() {
               </a>
             ))}
             <a
-              href="/blog"
+              href="/blog/"
               className="text-gray-300 hover:text-brand-gold transition-colors font-medium text-sm"
             >
               בלוג
@@ -177,7 +177,7 @@ function Header() {
                 </a>
               ))}
               <a
-                href="/blog"
+                href="/blog/"
                 className="block w-full text-right px-4 py-3 text-gray-200 hover:bg-white/10 hover:text-brand-gold rounded-xl transition-colors font-medium text-base"
               >
                 בלוג
@@ -1321,7 +1321,7 @@ function Contact() {
                   />
                   <span className="text-xs text-gray-500 leading-relaxed">
                     בשליחת הטופס אני מאשר/ת שמירת פרטים לצורך מתן שירות, ניהול קשרי לקוחות ושיווק, בהתאם ל
-                    <a href="/privacy" className="underline hover:text-brand-gold-light transition-colors">מדיניות הפרטיות</a>. *
+                    <a href="/privacy/" className="underline hover:text-brand-gold-light transition-colors">מדיניות הפרטיות</a>. *
                   </span>
                 </label>
 
@@ -1377,7 +1377,7 @@ function Footer() {
           <div>
             <img src="/logo-tight.webp" alt="PartyTalk" className="h-12 w-auto mb-3" loading="lazy" decoding="async" />
             <p className="text-gray-500 text-sm leading-relaxed mb-4">כי כל אירוע צריך מזכרת אמיתית</p>
-            <a href="/blog" className="inline-flex items-center gap-2 border border-brand-gold/50 text-brand-gold-light hover:bg-brand-gold hover:text-brand-ink px-5 py-2.5 rounded-full font-bold text-sm transition-all">
+            <a href="/blog/" className="inline-flex items-center gap-2 border border-brand-gold/50 text-brand-gold-light hover:bg-brand-gold hover:text-brand-ink px-5 py-2.5 rounded-full font-bold text-sm transition-all">
               <Sparkles className="w-4 h-4" />
               לבלוג שלנו
             </a>
@@ -1424,9 +1424,9 @@ function Footer() {
             <h4 className="font-bold text-brand-gold mb-4">מידע משפטי</h4>
             <ul className="space-y-2 text-sm">
               {[
-                ["מדיניות פרטיות", "/privacy"],
-                ["הצהרת נגישות", "/accessibility"],
-                ["תנאי שימוש", "/terms"],
+                ["מדיניות פרטיות", "/privacy/"],
+                ["הצהרת נגישות", "/accessibility/"],
+                ["תנאי שימוש", "/terms/"],
               ].map(([label, href]) => (
                 <li key={href}>
                   <a href={href} className="text-gray-400 hover:text-white transition-colors">{label}</a>
@@ -1521,7 +1521,7 @@ function AccessibilityWidget() {
             ↺ איפוס
           </button>
           <a
-            href="/accessibility"
+            href="/accessibility/"
             className="block text-center text-xs text-blue-600 hover:underline mt-2 pt-2 border-t"
           >
             הצהרת נגישות

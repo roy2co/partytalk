@@ -3,6 +3,7 @@ import BackButton from "../components/BackButton";
 
 export const metadata: Metadata = {
   title: "תנאי שימוש - PartyTalk",
+  alternates: { canonical: "/terms/" },
 };
 
 export default function TermsPage() {

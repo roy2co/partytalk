@@ -19,12 +19,12 @@ export function generateMetadata({
 }): Metadata {
   const post = getPost(params.slug);
   if (!post) return {};
-  const url = `${SITE_URL}/blog/${post.slug}`;
+  const url = `${SITE_URL}/blog/${post.slug}/`;
   return {
     title: `${post.title} | PartyTalk`,
     description: post.description,
     keywords: post.keywords.join(", "),
-    alternates: { canonical: `/blog/${post.slug}` },
+    alternates: { canonical: `/blog/${post.slug}/` },
     openGraph: {
       title: post.title,
       description: post.description,
@@ -166,7 +166,7 @@ export default function ArticlePage({
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${SITE_URL}/blog/${post.slug}`,
+      "@id": `${SITE_URL}/blog/${post.slug}/`,
     },
     keywords: post.keywords.join(", "),
   };
@@ -188,7 +188,7 @@ export default function ArticlePage({
             <img src="/logo-tight.webp" alt="PartyTalk" className="h-10 w-auto" width={736} height={444} />
           </a>
           <a
-            href="/blog"
+            href="/blog/"
             className="text-sm text-gray-300 hover:text-brand-gold transition-colors"
           >
             ← כל המאמרים
@@ -201,7 +201,7 @@ export default function ArticlePage({
         <nav className="text-xs text-gray-500 mb-6" aria-label="breadcrumb">
           <a href="/" className="hover:text-brand-gold transition-colors">דף הבית</a>
           <span className="mx-2">/</span>
-          <a href="/blog" className="hover:text-brand-gold transition-colors">בלוג</a>
+          <a href="/blog/" className="hover:text-brand-gold transition-colors">בלוג</a>
         </nav>
 
         {/* Title */}

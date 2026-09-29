@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "הבלוג של פארטיטוק - כל מה שכדאי לדעת על מראיינת לאירוע, עמדת צילום לאירועים, אטרקציות מיוחדות ויצירת זיכרון אמיתי מהאירוע שלכם.",
   keywords:
     "בלוג פארטיטוק, מראיינת לאירוע, עמדת צילום לאירועים, אטרקציה מיוחדת, זיכרון מהאירוע, אטרקציה לחתונה",
-  alternates: { canonical: "/blog" },
+  alternates: { canonical: "/blog/" },
   openGraph: {
     title: "הבלוג של PartyTalk | טיפים, השראה וזיכרון מהאירוע",
     description:
@@ -81,7 +81,7 @@ export default function BlogIndex() {
           {SORTED_POSTS.map((post) => (
             <a
               key={post.slug}
-              href={`/blog/${post.slug}`}
+              href={`/blog/${post.slug}/`}
               className="group rounded-3xl p-[1.5px] bg-gradient-to-br from-brand-gold/60 via-white/10 to-brand-gold/25 hover:from-brand-gold/90 hover:to-brand-gold/50 transition-all hover:-translate-y-1 shadow-[0_16px_50px_rgba(0,0,0,0.4)]"
             >
               <article className="rounded-3xl overflow-hidden bg-brand-coal h-full flex flex-col">

@@ -31,6 +31,7 @@ const suezOne = Suez_One({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://partytalk.co.il"),
+  alternates: { canonical: "/" },
   title: "עמדת ראיונות לאירוע | PartyTalk - האטרקציה שכולם מדברים עליה",
   description:
     "עמדת ראיונות לאירוע - האטרקציה הייחודית שבה מראיינת וצלם מראיינים את האורחים עליכם ויוצרים סרטון מרגש. מושלם לחתונה, יום הולדת ואירוע חברה. השאירו פרטים.",

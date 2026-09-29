@@ -22,7 +22,7 @@
 
 ## עמודים מרכזיים
 - דף הבית: https://partytalk.co.il
-- בלוג (טיפים ותכנים על אירועים): https://partytalk.co.il/blog
-- מדיניות פרטיות: https://partytalk.co.il/privacy
-- תנאי שימוש: https://partytalk.co.il/terms
-- הצהרת נגישות: https://partytalk.co.il/accessibility
+- בלוג (טיפים ותכנים על אירועים): https://partytalk.co.il/blog/
+- מדיניות פרטיות: https://partytalk.co.il/privacy/
+- תנאי שימוש: https://partytalk.co.il/terms/
+- הצהרת נגישות: https://partytalk.co.il/accessibility/

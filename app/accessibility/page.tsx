@@ -3,6 +3,7 @@ import BackButton from "../components/BackButton";
 
 export const metadata: Metadata = {
   title: "הצהרת נגישות - PartyTalk",
+  alternates: { canonical: "/accessibility/" },
 };
 
 export default function AccessibilityPage() {
