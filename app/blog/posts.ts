@@ -31,7 +31,7 @@ const DIR_PRESENT = "/blog-images/present-at-your-wedding";
 const DIR_COMPANY = "/blog-images/company-event-attractions";
 const DIR_REGULAR = "/blog-images/regular-couple-wedding";
 const DIR_RESEARCH = "/blog-images/interviewer-researcher";
-const DIR_ATTRACTIONS = "/blog-images/wedding-attractions-2026";
+const DIR_ATTRACTIONS = "/blog-images/wedding-attractions";
 
 export const POSTS: BlogPost[] = [
   {
