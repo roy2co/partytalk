@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Heebo, Suez_One } from "next/font/google";
 import Script from "next/script";
+import PromoPopup from "./components/PromoPopup";
 import "./globals.css";
 
 // ── Google Analytics 4 (gtag ישיר) ────────────────────────────
@@ -123,7 +124,11 @@ export default function RootLayout({
           }(window, document, 'ttq');
         `}</Script>
       </head>
-      <body className={`${heebo.className} ${suezOne.variable}`}>{children}</body>
+      <body className={`${heebo.className} ${suezOne.variable}`}>
+        {children}
+        {/* פופאפ מבצע — בכל עמודי האתר, כולל מאמרי הבלוג */}
+        <PromoPopup />
+      </body>
     </html>
   );
 }
