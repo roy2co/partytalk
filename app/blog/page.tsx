@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { POSTS } from "./posts";
-import BlogImage from "./BlogImage";
+import BlogGrid from "./BlogGrid";
 import ContactLink from "../components/ContactLink";
 
 // החדש ראשון - בתאריך זהה, מה שנוסף אחרון למערך מופיע קודם
@@ -23,14 +23,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("he-IL", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export default function BlogIndex() {
   return (
@@ -77,41 +69,13 @@ export default function BlogIndex() {
 
       {/* Posts grid */}
       <main className="max-w-5xl mx-auto px-4 pb-24">
-        <div className="grid gap-8 sm:grid-cols-2">
-          {SORTED_POSTS.map((post) => (
-            <a
-              key={post.slug}
-              href={`/blog/${post.slug}/`}
-              className="group rounded-3xl p-[1.5px] bg-gradient-to-br from-brand-gold/60 via-white/10 to-brand-gold/25 hover:from-brand-gold/90 hover:to-brand-gold/50 transition-all hover:-translate-y-1 shadow-[0_16px_50px_rgba(0,0,0,0.4)]"
-            >
-              <article className="rounded-3xl overflow-hidden bg-brand-coal h-full flex flex-col">
-                <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                  <BlogImage
-                    src={post.coverImage}
-                    alt={post.coverAlt}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-center gap-3 text-xs text-brand-gold/80 mb-3">
-                    <span>{formatDate(post.date)}</span>
-                    <span className="w-1 h-1 rounded-full bg-brand-gold/50" />
-                    <span>{post.readingMinutes} דק׳ קריאה</span>
-                  </div>
-                  <h2 className="font-display text-xl md:text-2xl text-white leading-snug mb-3 group-hover:text-brand-gold-light transition-colors">
-                    {post.title}
-                  </h2>
-                  <p className="text-gray-400 text-sm leading-relaxed flex-1">
-                    {post.excerpt}
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-brand-gold font-bold text-sm">
-                    קראו עוד ←
-                  </span>
-                </div>
-              </article>
-            </a>
-          ))}
-        </div>
+        <BlogGrid
+          posts={SORTED_POSTS.map(
+            ({ slug, topic, title, date, readingMinutes, coverImage, coverAlt, excerpt }) => ({
+              slug, topic, title, date, readingMinutes, coverImage, coverAlt, excerpt,
+            })
+          )}
+        />
 
         {/* CTA - funnel to lead form */}
         <div className="mt-16 rounded-3xl p-[1.5px] bg-gradient-to-br from-brand-gold/70 via-white/10 to-brand-gold/30">

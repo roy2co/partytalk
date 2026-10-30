@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { POSTS, getPost, type BlogBlock } from "../posts";
+import { POSTS, TOPICS, AUTHOR, getPost, type BlogBlock, type BlogPost } from "../posts";
 import BlogImage from "../BlogImage";
 import ContactLink from "../../components/ContactLink";
 
@@ -43,6 +43,20 @@ export function generateMetadata({
   };
 }
 
+// מאמרים קשורים: קודם מאותו נושא (החדשים קודם), ואז השלמה מנושאים אחרים
+function relatedPosts(post: BlogPost, count = 2) {
+  const others = POSTS.filter((p) => p.slug !== post.slug).sort((a, b) =>
+    b.date.localeCompare(a.date)
+  );
+  const same = others.filter((p) => p.topic === post.topic);
+  const rest = others.filter((p) => p.topic !== post.topic);
+  return [...same, ...rest].slice(0, count);
+}
+
+function topicLabel(id: BlogPost["topic"]) {
+  return TOPICS.find((t) => t.id === id)?.label ?? "";
+}
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("he-IL", {
     day: "numeric",
@@ -63,6 +77,28 @@ function toEmbedSrc(src: string) {
   return src;
 }
 
+// ── טקסט עם קישורים פנימיים: [טקסט](/blog/slug/) ──────────────
+function RichText({ text }: { text: string }) {
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+        if (!m) return part;
+        return (
+          <a
+            key={i}
+            href={m[2]}
+            className="text-brand-gold-light underline decoration-brand-gold/50 underline-offset-4 hover:text-brand-gold transition-colors"
+          >
+            {m[1]}
+          </a>
+        );
+      })}
+    </>
+  );
+}
+
 function Block({ block }: { block: BlogBlock }) {
   switch (block.type) {
     case "h2":
@@ -73,7 +109,7 @@ function Block({ block }: { block: BlogBlock }) {
       );
     case "p":
       return (
-        <p className="text-gray-300 text-lg leading-relaxed mb-5">{block.text}</p>
+        <p className="text-gray-300 text-lg leading-relaxed mb-5"><RichText text={block.text} /></p>
       );
     case "quote":
       return (
@@ -89,7 +125,7 @@ function Block({ block }: { block: BlogBlock }) {
           {block.items.map((item, i) => (
             <li key={i} className="flex gap-3 text-gray-300 text-lg leading-relaxed">
               <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" aria-hidden="true" />
-              <span>{item}</span>
+              <span><RichText text={item} /></span>
             </li>
           ))}
         </ul>
@@ -114,6 +150,15 @@ function Block({ block }: { block: BlogBlock }) {
             </figcaption>
           )}
         </figure>
+      );
+    case "faq":
+      return (
+        <>
+          <h2 className="font-display text-2xl md:text-3xl text-white mt-12 mb-4 leading-snug">
+            {block.q}
+          </h2>
+          <p className="text-gray-300 text-lg leading-relaxed mb-5"><RichText text={block.a} /></p>
+        </>
       );
     case "video":
       if (!block.src) return null;
@@ -158,7 +203,12 @@ export default function ArticlePage({
     image: `${SITE_URL}${post.coverImage}`,
     datePublished: post.date,
     dateModified: post.date,
-    author: { "@type": "Organization", name: "PartyTalk" },
+    author: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      jobTitle: AUTHOR.role,
+      worksFor: { "@type": "Organization", name: "PartyTalk", url: SITE_URL },
+    },
     publisher: {
       "@type": "Organization",
       name: "PartyTalk",
@@ -171,6 +221,24 @@ export default function ArticlePage({
     keywords: post.keywords.join(", "),
   };
 
+  const faqs = post.blocks.filter(
+    (b): b is Extract<BlogBlock, { type: "faq" }> => b.type === "faq"
+  );
+  const stripLinks = (t: string) => t.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  const faqLd = faqs.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: stripLinks(f.a) },
+        })),
+      }
+    : null;
+
+  const related = relatedPosts(post);
+
   return (
     <div className="min-h-screen bg-brand-ink text-white" dir="rtl">
       {/* בריחת < מונעת יציאה מתג הסקריפט אם תוכן פוסט יכיל אי-פעם "</script>" */}
@@ -180,6 +248,14 @@ export default function ArticlePage({
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
 
       {/* Header */}
       <header className="border-b border-white/10 py-4 px-4 sticky top-0 bg-brand-ink/85 backdrop-blur-xl z-10">
@@ -209,10 +285,17 @@ export default function ArticlePage({
           <span>{formatDate(post.date)}</span>
           <span className="w-1 h-1 rounded-full bg-brand-gold/50" />
           <span>{post.readingMinutes} דק׳ קריאה</span>
+          <span className="w-1 h-1 rounded-full bg-brand-gold/50" />
+          <a href={`/blog/?topic=${post.topic}`} className="hover:text-brand-gold transition-colors">
+            {topicLabel(post.topic)}
+          </a>
         </div>
         <h1 className="font-display text-3xl md:text-5xl text-white leading-tight mb-6">
           {post.title}
         </h1>
+        <p className="text-sm text-gray-400 mb-6">
+          נכתב ע״י <span className="text-gray-200 font-bold">{AUTHOR.name}</span>, {AUTHOR.role}
+        </p>
         <div className="gold-hairline mb-10" />
 
         {/* Body */}
@@ -221,6 +304,34 @@ export default function ArticlePage({
             <Block key={i} block={block} />
           ))}
         </article>
+
+        {/* מאמרים קשורים */}
+        {related.length > 0 && (
+          <section className="mt-16" aria-labelledby="related-title">
+            <h2 id="related-title" className="font-display text-2xl md:text-3xl text-white mb-6">
+              עוד מהבלוג
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {related.map((r) => (
+                <a
+                  key={r.slug}
+                  href={`/blog/${r.slug}/`}
+                  className="group rounded-2xl border border-white/10 hover:border-brand-gold/60 bg-brand-coal overflow-hidden flex gap-4 items-center p-3 transition-colors"
+                >
+                  <img
+                    src={r.coverImage}
+                    alt={r.coverAlt}
+                    loading="lazy"
+                    className="w-24 h-16 object-cover rounded-xl shrink-0"
+                  />
+                  <span className="text-sm md:text-base text-gray-200 leading-snug group-hover:text-brand-gold-light transition-colors">
+                    {r.title}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* CTA */}
         <div className="mt-14 rounded-3xl p-[1.5px] bg-gradient-to-br from-brand-gold/70 via-white/10 to-brand-gold/30">
